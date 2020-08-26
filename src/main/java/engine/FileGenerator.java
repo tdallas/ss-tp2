@@ -12,20 +12,20 @@ public class FileGenerator {
 
     public FileGenerator(String filename) {
         try {
-            FileWriter pw = new FileWriter("out/" + filename + ".txt");
+            FileWriter pw = new FileWriter("out/" + filename + ".xyz");
             pw.close();
-            this.fw = new FileWriter("out/" + filename + ".txt", true);
+            this.fw = new FileWriter("out/" + filename + ".xyz", true);
         } catch (IOException e) {
             e.printStackTrace();
         }
         this.bw = new BufferedWriter(fw);
     }
 
-    public void addCells(Cell[][] cells, int numberOfParticles, long timeOfCycle){
+    public void addCells(Cell[][] cells, int numberOfParticles, long timeOfCycle, int particlesOnLeft, int particlesOnRight, long finalTime){
         double x, y, toX, toY, dY = (Math.sqrt(3)/2);
         try {
             bw.write(numberOfParticles + "\n");
-            bw.write(timeOfCycle + "\n");
+            bw.write(particlesOnLeft + " " + particlesOnRight + " " + timeOfCycle + " " + finalTime + "\n");
             for(int i=0; i < 202; i++){
                 for(int j=0; j < 203; j++){
                     y = i * dY;

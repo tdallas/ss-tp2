@@ -1,4 +1,4 @@
-import engine.FileGenerator;
+import engine.FHPSimulation;
 import engine.ParticlesGenerator;
 import org.apache.commons.cli.*;
 
@@ -10,10 +10,11 @@ public class Main {
 
     public static void main(String[] args){
         parseArguments(args);
-        ParticlesGenerator particlesGenerator = new ParticlesGenerator(new Random(), n);
-        FileGenerator fileGenerator = new FileGenerator(filename);
-        fileGenerator.addCells(particlesGenerator.getCells(), n, 10);
-        fileGenerator.closeFile();
+        //Just in case testing is needed to have the same seed on everything
+        Random rand = new Random();
+        ParticlesGenerator particlesGenerator = new ParticlesGenerator(rand, n);
+        FHPSimulation fhpSimulation = new FHPSimulation(n, particlesGenerator.getCells(), filename, rand);
+        fhpSimulation.simulate();
     }
 
     private static void parseArguments(String[] args){
@@ -41,7 +42,7 @@ public class Main {
         }
 
         n = Integer.parseInt(cmd.getOptionValue("n-particles"));
-        if(n < 0 || n > 20000){
+        if(n < 0 || n > 10000){
             System.out.println("Invalid number of particles");
             System.exit(1);
         }
