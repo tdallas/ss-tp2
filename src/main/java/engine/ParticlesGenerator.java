@@ -59,7 +59,7 @@ public class ParticlesGenerator {
 
         while (particleOverlaps && attempts < ALLOWED_ATTEMPTS) {
             randomX = generateRandomInt(1, 101);
-            randomY = generateRandomInt(1, 101);
+            randomY = generateRandomInt(1, 201);
 
             if(cells[randomY][randomX].particleCount() == 0){
                 particleOverlaps = false;
@@ -72,7 +72,6 @@ public class ParticlesGenerator {
         if(particleOverlaps && attempts < ALLOWED_ATTEMPTS){
             throw new IllegalArgumentException("Could not generate particle in less attempts than allowed.");
         }
-        System.out.println(randomX + " " + randomY);
     }
 
     private void setRandomDirection(Cell cell) {
