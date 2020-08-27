@@ -63,8 +63,11 @@ public class FHPSimulation {
                             else if(fromCells[i][j + 1].isWall()){
                                 toCells[i - 1][j].setC(true);
                             }
-                            else{
+                            else if(fromCells[i - 1][j].isWall()){
                                 toCells[i][j + 1].setF(true);
+                            }
+                            else{
+                                toCells[i][j].setE(true);
                             }
                         }
                     }
@@ -78,8 +81,11 @@ public class FHPSimulation {
                             else if(fromCells[i][j - 1].isWall()){
                                 toCells[i - 1][j].setB(true);
                             }
-                            else{
+                            else if(fromCells[i - 1][j].isWall()){
                                 toCells[i][j - 1].setE(true);
+                            }
+                            else{
+                                toCells[i][j].setF(true);
                             }
                         }
                     }
@@ -100,8 +106,11 @@ public class FHPSimulation {
                             else if(fromCells[i][j - 1].isWall()){
                                 toCells[i + 1][j].setF(true);
                             }
-                            else{
+                            else if(fromCells[i + 1][j].isWall()){
                                 toCells[i][j - 1].setC(true);
+                            }
+                            else{
+                                toCells[i][j].setB(true);
                             }
                         }
                     }
@@ -109,14 +118,17 @@ public class FHPSimulation {
                         if (!fromCells[i + 1][j + 1].isWall()) {
                             toCells[i + 1][j + 1].setF(true);
                         } else {
-                            if(fromCells[i][j + 1].isWall() && fromCells[i + 1][j].isWall()){
+                            if(fromCells[i + 1][j].isWall() && fromCells[i][j + 1].isWall()){
                                 toCells[i][j].setC(true);
                             }
                             else if(fromCells[i][j + 1].isWall()){
                                 toCells[i + 1][j].setE(true);
                             }
-                            else{
+                            else if(fromCells[i + 1][j].isWall()){
                                 toCells[i][j + 1].setB(true);
+                            }
+                            else{
+                                toCells[i][j].setC(true);
                             }
                         }
                     }
