@@ -16,7 +16,7 @@ public class FHPSimulation {
 
     public FHPSimulation(int numberOfParticles, Cell[][] cells, String outputFilename, Random rand){
         this.numberOfParticles = numberOfParticles;
-        this.fileGenerator = new FileGenerator(outputFilename, true);
+        this.fileGenerator = new FileGenerator(outputFilename, false);
         this.collisionCells = cloneCells(cells);
         this.propagatedCells = cloneCells(cells);
         cleanCells(this.propagatedCells);
@@ -33,6 +33,9 @@ public class FHPSimulation {
         while(!isBalanced()){
             startCycleTime = System.currentTimeMillis();
             propagateParticles(collisionCells, propagatedCells);
+            endTime = System.currentTimeMillis();
+            fileGenerator.addCells(propagatedCells, numberOfParticles, endTime - startCycleTime, particlesOnLeft, particlesOnRight, endTime - startTime);
+            startCycleTime = System.currentTimeMillis();
             collisionParticles(propagatedCells, collisionCells);
             endTime = System.currentTimeMillis();
             particlesOnLeft = getParticlesOnLeft(collisionCells);

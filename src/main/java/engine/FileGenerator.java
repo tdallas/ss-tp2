@@ -44,7 +44,7 @@ public class FileGenerator {
                             else {
                                 toX = x + 1;
                                 toY = y;
-                                bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                                bw.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
                             }
                         }
                         if (cells[i][j].isB()) {
@@ -54,7 +54,7 @@ public class FileGenerator {
                             else {
                                 toX = x + 1;
                                 toY = y - dY;
-                                bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                                bw.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
                             }
                         }
                         if (cells[i][j].isC()) {
@@ -64,7 +64,7 @@ public class FileGenerator {
                             else {
                                 toX = x - 1;
                                 toY = y - dY;
-                                bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                                bw.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
                             }
                         }
                         if (cells[i][j].isD()) {
@@ -74,7 +74,7 @@ public class FileGenerator {
                             else {
                                 toX = x - 1;
                                 toY = y;
-                                bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                                bw.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
                             }
                         }
                         if (cells[i][j].isE()) {
@@ -84,7 +84,7 @@ public class FileGenerator {
                             else {
                                 toX = x - 1;
                                 toY = y + dY;
-                                bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                                bw.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
                             }
                         }
                         if (cells[i][j].isF()) {
@@ -94,7 +94,7 @@ public class FileGenerator {
                             else {
                                 toX = x + 1;
                                 toY = y + dY;
-                                bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                                bw.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
                             }
                         }
                     }
