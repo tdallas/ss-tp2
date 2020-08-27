@@ -12,8 +12,7 @@ public class FHPSimulation {
     private int particlesOnLeft;
     private int particlesOnRight;
     private final Random rand;
-
-    public static int BALANCE_LIMIT = 50;
+    private final int BALANCE_LIMIT;
 
     public FHPSimulation(int numberOfParticles, Cell[][] cells, String outputFilename, Random rand){
         this.numberOfParticles = numberOfParticles;
@@ -24,6 +23,7 @@ public class FHPSimulation {
         this.particlesOnRight = 0;
         this.particlesOnLeft = numberOfParticles;
         this.rand = rand;
+        this.BALANCE_LIMIT = (int)(numberOfParticles * 0.01);
     }
 
     public void simulate(){
