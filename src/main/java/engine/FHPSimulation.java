@@ -17,7 +17,7 @@ public class FHPSimulation {
 
     public FHPSimulation(int numberOfParticles, Cell[][] cells, String outputFilename, Random rand){
         this.numberOfParticles = numberOfParticles;
-        this.fileGenerator = new FileGenerator(outputFilename);
+        this.fileGenerator = new FileGenerator(outputFilename, true);
         this.collisionCells = cloneCells(cells);
         this.propagatedCells = cloneCells(cells);
         cleanCells(this.propagatedCells);
@@ -27,6 +27,7 @@ public class FHPSimulation {
     }
 
     public void simulate(){
+        fileGenerator.addCells(collisionCells, numberOfParticles, 0, particlesOnLeft, particlesOnRight, 0);
         long startTime = System.currentTimeMillis();
         long endTime, startCycleTime;
         while(!isBalanced()){
@@ -44,70 +45,66 @@ public class FHPSimulation {
     private void propagateParticles(){
         for(int i = 0; i < collisionCells.length; i++){
             for(int j = 0; j < collisionCells[0].length; j++){
-                int toI;
-                int toJ;
-                if(collisionCells[i][j].isA()){
-                    toI = i;
-                    toJ = j + 1;
-                    if(!collisionCells[toI][toJ].isWall()){
-                        propagatedCells[toI][toJ].setA(true);
+                if(!collisionCells[i][j].isWall()) {
+                    int toI;
+                    int toJ;
+                    if (collisionCells[i][j].isA()) {
+                        toI = i;
+                        toJ = j + 1;
+                        if (!collisionCells[toI][toJ].isWall()) {
+                            propagatedCells[toI][toJ].setA(true);
+                        } else {
+                            propagatedCells[i][j].setD(true);
+                        }
                     }
-                    else{
-                        propagatedCells[i][j].setD(true);
+                    if (collisionCells[i][j].isB()) {
+                        toI = i + 1;
+                        toJ = j - 1;
+                        if (!collisionCells[toI][toJ].isWall()) {
+                            propagatedCells[toI][toJ].setB(true);
+                        } else {
+                            propagatedCells[i][j].setE(true);
+                        }
                     }
+                    if (collisionCells[i][j].isC()) {
+                        toI = i - 1;
+                        toJ = j - 1;
+                        if (!collisionCells[toI][toJ].isWall()) {
+                            propagatedCells[toI][toJ].setC(true);
+                        } else {
+                            propagatedCells[i][j].setF(true);
+                        }
+                    }
+                    if (collisionCells[i][j].isD()) {
+                        toI = i;
+                        toJ = j - 1;
+                        if (!collisionCells[toI][toJ].isWall()) {
+                            propagatedCells[toI][toJ].setD(true);
+                        } else {
+                            propagatedCells[i][j].setA(true);
+                        }
+                    }
+                    if (collisionCells[i][j].isE()) {
+                        toI = i - 1;
+                        toJ = j + 1;
+                        if (!collisionCells[toI][toJ].isWall()) {
+                            propagatedCells[toI][toJ].setE(true);
+                        } else {
+                            propagatedCells[i][j].setB(true);
+                        }
+                    }
+                    if (collisionCells[i][j].isF()) {
+                        toI = i + 1;
+                        toJ = j + 1;
+                        if (!collisionCells[toI][toJ].isWall()) {
+                            propagatedCells[toI][toJ].setF(true);
+                        } else {
+                            propagatedCells[i][j].setC(true);
+                        }
+                    }
+                    //Resets cell for next iteration
+                    collisionCells[i][j].resetCell();
                 }
-                if(collisionCells[i][j].isB()){
-                    toI = i + 1;
-                    toJ = j - 1;
-                    if(!collisionCells[toI][toJ].isWall()){
-                        propagatedCells[toI][toJ].setB(true);
-                    }
-                    else{
-                        propagatedCells[i][j].setE(true);
-                    }
-                }
-                if(collisionCells[i][j].isC()){
-                    toI = i - 1;
-                    toJ = j - 1;
-                    if(!collisionCells[toI][toJ].isWall()){
-                        propagatedCells[toI][toJ].setC(true);
-                    }
-                    else{
-                        propagatedCells[i][j].setF(true);
-                    }
-                }
-                if(collisionCells[i][j].isD()){
-                    toI = i;
-                    toJ = j - 1;
-                    if(!collisionCells[toI][toJ].isWall()){
-                        propagatedCells[toI][toJ].setD(true);
-                    }
-                    else{
-                        propagatedCells[i][j].setA(true);
-                    }
-                }
-                if(collisionCells[i][j].isE()){
-                    toI = i - 1;
-                    toJ = j + 1;
-                    if(!collisionCells[toI][toJ].isWall()){
-                        propagatedCells[toI][toJ].setE(true);
-                    }
-                    else{
-                        propagatedCells[i][j].setB(true);
-                    }
-                }
-                if(collisionCells[i][j].isF()){
-                    toI = i + 1;
-                    toJ = j + 1;
-                    if(!collisionCells[toI][toJ].isWall()){
-                        propagatedCells[toI][toJ].setF(true);
-                    }
-                    else{
-                        propagatedCells[i][j].setC(true);
-                    }
-                }
-                //Resets cell for next iteration
-                collisionCells[i][j].resetCell();
             }
         }
     }
@@ -115,50 +112,52 @@ public class FHPSimulation {
     private void collisionParticles(){
         for(int i = 0; i < propagatedCells.length; i++){
             for(int j = 0; j < propagatedCells[0].length; j++){
-                if(rand.nextInt()%2 == 0){
-                    //Moves everything clockwise
-                    if(propagatedCells[i][j].isA()){
-                        collisionCells[i][j].setB(true);
+                if(!propagatedCells[i][j].isWall()) {
+                    if (rand.nextInt() % 2 == 0) {
+                        //Moves everything clockwise
+                        if (propagatedCells[i][j].isA()) {
+                            collisionCells[i][j].setB(true);
+                        }
+                        if (propagatedCells[i][j].isB()) {
+                            collisionCells[i][j].setC(true);
+                        }
+                        if (propagatedCells[i][j].isC()) {
+                            collisionCells[i][j].setD(true);
+                        }
+                        if (propagatedCells[i][j].isD()) {
+                            collisionCells[i][j].setE(true);
+                        }
+                        if (propagatedCells[i][j].isE()) {
+                            collisionCells[i][j].setF(true);
+                        }
+                        if (propagatedCells[i][j].isF()) {
+                            collisionCells[i][j].setA(true);
+                        }
+                    } else {
+                        //Moves everything anti clockwise
+                        if (propagatedCells[i][j].isA()) {
+                            collisionCells[i][j].setF(true);
+                        }
+                        if (propagatedCells[i][j].isB()) {
+                            collisionCells[i][j].setA(true);
+                        }
+                        if (propagatedCells[i][j].isC()) {
+                            collisionCells[i][j].setB(true);
+                        }
+                        if (propagatedCells[i][j].isD()) {
+                            collisionCells[i][j].setC(true);
+                        }
+                        if (propagatedCells[i][j].isE()) {
+                            collisionCells[i][j].setD(true);
+                        }
+                        if (propagatedCells[i][j].isF()) {
+                            collisionCells[i][j].setE(true);
+                        }
                     }
-                    if(propagatedCells[i][j].isB()){
-                        collisionCells[i][j].setC(true);
-                    }
-                    if(propagatedCells[i][j].isC()){
-                        collisionCells[i][j].setD(true);
-                    }
-                    if(propagatedCells[i][j].isD()){
-                        collisionCells[i][j].setE(true);
-                    }
-                    if(propagatedCells[i][j].isE()){
-                        collisionCells[i][j].setF(true);
-                    }
-                    if(propagatedCells[i][j].isF()){
-                        collisionCells[i][j].setA(true);
-                    }
+
+                    //Resets cell for next iteration
+                    propagatedCells[i][j].resetCell();
                 }
-                else{
-                    //Moves everything anti clockwise
-                    if(propagatedCells[i][j].isA()){
-                        collisionCells[i][j].setF(true);
-                    }
-                    if(propagatedCells[i][j].isB()){
-                        collisionCells[i][j].setA(true);
-                    }
-                    if(propagatedCells[i][j].isC()){
-                        collisionCells[i][j].setB(true);
-                    }
-                    if(propagatedCells[i][j].isD()){
-                        collisionCells[i][j].setC(true);
-                    }
-                    if(propagatedCells[i][j].isE()){
-                        collisionCells[i][j].setD(true);
-                    }
-                    if(propagatedCells[i][j].isF()){
-                        collisionCells[i][j].setE(true);
-                    }
-                }
-                //Resets cell for next iteration
-                propagatedCells[i][j].resetCell();
             }
         }
     }

@@ -9,8 +9,9 @@ import java.io.IOException;
 public class FileGenerator {
     private FileWriter fw;
     private final BufferedWriter bw;
+    private final boolean angle;
 
-    public FileGenerator(String filename) {
+    public FileGenerator(String filename, boolean angle) {
         try {
             FileWriter pw = new FileWriter("out/" + filename + ".xyz");
             pw.close();
@@ -19,6 +20,7 @@ public class FileGenerator {
             e.printStackTrace();
         }
         this.bw = new BufferedWriter(fw);
+        this.angle = angle;
     }
 
     public void addCells(Cell[][] cells, int numberOfParticles, long timeOfCycle, int particlesOnLeft, int particlesOnRight, long finalTime){
@@ -28,42 +30,73 @@ public class FileGenerator {
             bw.write(particlesOnLeft + " " + particlesOnRight + " " + timeOfCycle + " " + finalTime + "\n");
             for(int i=0; i < 202; i++){
                 for(int j=0; j < 203; j++){
-                    y = i * dY;
-                    if(j%2 == 0){
-                        x = j;
-                    }
-                    else{
-                        x = j + 0.5;
-                    }
-                    if(cells[i][j].isA()){
-                        toX = x + 1;
-                        toY = y;
-                        bw.write(x + " " + y + " " + toX + " " + toY + "\n");
-                    }
-                    if(cells[i][j].isB()){
-                        toX = x + 1;
-                        toY = y - dY;
-                        bw.write(x + " " + y + " " + toX + " " + toY + "\n");
-                    }
-                    if(cells[i][j].isC()){
-                        toX = x - 1;
-                        toY = y - dY;
-                        bw.write(x + " " + y + " " + toX + " " + toY + "\n");
-                    }
-                    if(cells[i][j].isD()){
-                        toX = x - 1;
-                        toY = y;
-                        bw.write(x + " " + y + " " + toX + " " + toY + "\n");
-                    }
-                    if(cells[i][j].isE()){
-                        toX = x - 1;
-                        toY = y + dY;
-                        bw.write(x + " " + y + " " + toX + " " + toY + "\n");
-                    }
-                    if(cells[i][j].isF()){
-                        toX = x + 1;
-                        toY = y + dY;
-                        bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                    if(!cells[i][j].isWall()) {
+                        y = i * dY;
+                        if (j % 2 == 0) {
+                            x = j;
+                        } else {
+                            x = j + 0.5;
+                        }
+                        if (cells[i][j].isA()) {
+                            if(angle){
+                                bw.write(x + " " + y + " 0.0\n");
+                            }
+                            else {
+                                toX = x + 1;
+                                toY = y;
+                                bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                            }
+                        }
+                        if (cells[i][j].isB()) {
+                            if(angle){
+                                bw.write(x + " " + y + " 60.0\n");
+                            }
+                            else {
+                                toX = x + 1;
+                                toY = y - dY;
+                                bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                            }
+                        }
+                        if (cells[i][j].isC()) {
+                            if(angle){
+                                bw.write(x + " " + y + " 120.0\n");
+                            }
+                            else {
+                                toX = x - 1;
+                                toY = y - dY;
+                                bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                            }
+                        }
+                        if (cells[i][j].isD()) {
+                            if(angle){
+                                bw.write(x + " " + y + " 180.0\n");
+                            }
+                            else {
+                                toX = x - 1;
+                                toY = y;
+                                bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                            }
+                        }
+                        if (cells[i][j].isE()) {
+                            if(angle){
+                                bw.write(x + " " + y + " 240.0\n");
+                            }
+                            else {
+                                toX = x - 1;
+                                toY = y + dY;
+                                bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                            }
+                        }
+                        if (cells[i][j].isF()) {
+                            if(angle){
+                                bw.write(x + " " + y + " 300.0\n");
+                            }
+                            else {
+                                toX = x + 1;
+                                toY = y + dY;
+                                bw.write(x + " " + y + " " + toX + " " + toY + "\n");
+                            }
+                        }
                     }
                 }
             }
