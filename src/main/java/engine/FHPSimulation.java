@@ -44,62 +44,80 @@ public class FHPSimulation {
 
     private void propagateParticles(Cell[][] fromCells, Cell[][] toCells){
         for(int i = 0; i < fromCells.length; i++){
-            for(int j = 0; j < fromCells[0].length; j++){
+            for(int j = 0; j < fromCells[i].length; j++){
                 if(!fromCells[i][j].isWall()) {
-                    int toI;
-                    int toJ;
                     if (fromCells[i][j].isA()) {
-                        toI = i;
-                        toJ = j + 1;
-                        if (!fromCells[toI][toJ].isWall()) {
-                            toCells[toI][toJ].setA(true);
+                        if (!fromCells[i][j + 1].isWall()) {
+                            toCells[i][j + 1].setA(true);
                         } else {
                             toCells[i][j].setD(true);
                         }
                     }
                     if (fromCells[i][j].isB()) {
-                        toI = i + 1;
-                        toJ = j - 1;
-                        if (!fromCells[toI][toJ].isWall()) {
-                            toCells[toI][toJ].setB(true);
+                        if (!fromCells[i - 1][j + 1].isWall()) {
+                            toCells[i - 1][j + 1].setB(true);
                         } else {
-                            toCells[i][j].setE(true);
+                            if(fromCells[i - 1][j].isWall() && fromCells[i][j + 1].isWall()){
+                                toCells[i][j].setE(true);
+                            }
+                            else if(fromCells[i][j + 1].isWall()){
+                                toCells[i - 1][j].setC(true);
+                            }
+                            else{
+                                toCells[i][j + 1].setF(true);
+                            }
                         }
                     }
                     if (fromCells[i][j].isC()) {
-                        toI = i - 1;
-                        toJ = j - 1;
-                        if (!fromCells[toI][toJ].isWall()) {
-                            toCells[toI][toJ].setC(true);
+                        if (!fromCells[i - 1][j - 1].isWall()) {
+                            toCells[i - 1][j - 1].setC(true);
                         } else {
-                            toCells[i][j].setF(true);
+                            if(fromCells[i - 1][j].isWall() && fromCells[i][j - 1].isWall()){
+                                toCells[i][j].setF(true);
+                            }
+                            else if(fromCells[i][j - 1].isWall()){
+                                toCells[i - 1][j].setB(true);
+                            }
+                            else{
+                                toCells[i][j - 1].setE(true);
+                            }
                         }
                     }
                     if (fromCells[i][j].isD()) {
-                        toI = i;
-                        toJ = j - 1;
-                        if (!fromCells[toI][toJ].isWall()) {
-                            toCells[toI][toJ].setD(true);
+                        if (!fromCells[i][j - 1].isWall()) {
+                            toCells[i][j - 1].setD(true);
                         } else {
                             toCells[i][j].setA(true);
                         }
                     }
                     if (fromCells[i][j].isE()) {
-                        toI = i - 1;
-                        toJ = j + 1;
-                        if (!fromCells[toI][toJ].isWall()) {
-                            toCells[toI][toJ].setE(true);
+                        if (!fromCells[i + 1][j - 1].isWall()) {
+                            toCells[i + 1][j - 1].setE(true);
                         } else {
-                            toCells[i][j].setB(true);
+                            if(fromCells[i + 1][j].isWall() && fromCells[i][j - 1].isWall()){
+                                toCells[i][j].setB(true);
+                            }
+                            else if(fromCells[i][j - 1].isWall()){
+                                toCells[i + 1][j].setF(true);
+                            }
+                            else{
+                                toCells[i][j - 1].setC(true);
+                            }
                         }
                     }
                     if (fromCells[i][j].isF()) {
-                        toI = i + 1;
-                        toJ = j + 1;
-                        if (!fromCells[toI][toJ].isWall()) {
-                            toCells[toI][toJ].setF(true);
+                        if (!fromCells[i + 1][j + 1].isWall()) {
+                            toCells[i + 1][j + 1].setF(true);
                         } else {
-                            toCells[i][j].setC(true);
+                            if(fromCells[i][j + 1].isWall() && fromCells[i + 1][j].isWall()){
+                                toCells[i][j].setC(true);
+                            }
+                            else if(fromCells[i][j + 1].isWall()){
+                                toCells[i + 1][j].setE(true);
+                            }
+                            else{
+                                toCells[i][j + 1].setB(true);
+                            }
                         }
                     }
                     //Resets cell for next iteration
@@ -111,7 +129,7 @@ public class FHPSimulation {
 
     private void collisionParticles(Cell[][] fromCells, Cell[][] toCells){
         for(int i = 0; i < fromCells.length; i++){
-            for(int j = 0; j < fromCells[0].length; j++){
+            for(int j = 0; j < fromCells[i].length; j++){
                 if(!fromCells[i][j].isWall() && fromCells[i][j].particleCount() > 1 ) {
                     if (rand.nextInt() % 2 == 0) {
                         //Moves everything clockwise
