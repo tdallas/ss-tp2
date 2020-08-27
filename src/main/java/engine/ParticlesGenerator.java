@@ -53,7 +53,7 @@ public class ParticlesGenerator {
     }
 
     public void createParticle() {
-        int randomX = 0, randomY = 0;
+        int randomX, randomY;
         int attempts = 0;
         boolean particleOverlaps = true;
 
@@ -69,7 +69,7 @@ public class ParticlesGenerator {
             attempts++;
         }
 
-        if(particleOverlaps && attempts < ALLOWED_ATTEMPTS){
+        if(particleOverlaps){
             throw new IllegalArgumentException("Could not generate particle in less attempts than allowed.");
         }
     }
@@ -95,8 +95,6 @@ public class ParticlesGenerator {
             case 5:
                 cell.setF(true);
                 break;
-            default:
-                cell.setA(true);
         }
     }
 

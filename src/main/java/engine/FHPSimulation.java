@@ -5,13 +5,13 @@ import model.Cell;
 import java.util.Random;
 
 public class FHPSimulation {
-    private FileGenerator fileGenerator;
+    private final FileGenerator fileGenerator;
     private final int numberOfParticles;
-    private Cell[][] propagatedCells;
-    private Cell[][] collisionCells;
+    private final Cell[][] propagatedCells;
+    private final Cell[][] collisionCells;
     private int particlesOnLeft;
     private int particlesOnRight;
-    private Random rand;
+    private final Random rand;
 
     public static int BALANCE_LIMIT = 50;
 
@@ -182,9 +182,9 @@ public class FHPSimulation {
     }
 
     private void cleanCells(Cell[][] cells){
-        for(int i = 0; i < cells.length; i++){
-            for(int j = 0; j < cells[i].length; j++){
-                cells[i][j].resetCell();
+        for (Cell[] cellRow : cells) {
+            for (Cell cellValue : cellRow) {
+                cellValue.resetCell();
             }
         }
     }
@@ -195,9 +195,9 @@ public class FHPSimulation {
 
     private int getParticlesOnLeft(Cell[][] cells){
         int particlesOnLeft = 0;
-        for(int i = 0 ; i < cells.length; i++){
-            for(int j = 0; j < cells[i].length/2 + 1; j++){
-                particlesOnLeft += cells[i][j].particleCount();
+        for (Cell[] cellRow : cells) {
+            for (int j = 0; j < cellRow.length / 2; j++) {
+                particlesOnLeft += cellRow[j].particleCount();
             }
         }
         return particlesOnLeft;
@@ -205,9 +205,9 @@ public class FHPSimulation {
 
     private int getParticlesOnRight(Cell[][] cells){
         int particlesOnRight = 0;
-        for(int i = 0 ; i < cells.length; i++){
-            for(int j = cells[0].length/2 ; j < cells[i].length; j++){
-                particlesOnRight += cells[i][j].particleCount();
+        for (Cell[] cellRow : cells) {
+            for (int j = cellRow.length / 2; j < cellRow.length; j++) {
+                particlesOnRight += cellRow[j].particleCount();
             }
         }
         return particlesOnRight;
