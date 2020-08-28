@@ -16,7 +16,7 @@ public class FHPSimulation {
 
     public FHPSimulation(int numberOfParticles, Cell[][] cells, String outputFilename, Random rand){
         this.numberOfParticles = numberOfParticles;
-        this.fileGenerator = new FileGenerator(outputFilename, false);
+        this.fileGenerator = new FileGenerator(outputFilename);
         this.collisionCells = cloneCells(cells);
         this.propagatedCells = cloneCells(cells);
         cleanCells(this.propagatedCells);
@@ -27,22 +27,23 @@ public class FHPSimulation {
     }
 
     public void simulate(){
-        fileGenerator.addCells(collisionCells, numberOfParticles, 0, particlesOnLeft, particlesOnRight, 0);
+        fileGenerator.addToXYZ(collisionCells, numberOfParticles, 0, particlesOnLeft, particlesOnRight, 0);
         long startTime = System.currentTimeMillis();
         long endTime, startCycleTime;
         while(!isBalanced()){
             startCycleTime = System.currentTimeMillis();
             propagateParticles(collisionCells, propagatedCells);
             endTime = System.currentTimeMillis();
-            fileGenerator.addCells(propagatedCells, numberOfParticles, endTime - startCycleTime, particlesOnLeft, particlesOnRight, endTime - startTime);
+            fileGenerator.addToXYZ(propagatedCells, numberOfParticles, endTime - startCycleTime, particlesOnLeft, particlesOnRight, endTime - startTime);
             startCycleTime = System.currentTimeMillis();
             collisionParticles(propagatedCells, collisionCells);
             endTime = System.currentTimeMillis();
             particlesOnLeft = getParticlesOnLeft(collisionCells);
             particlesOnRight = getParticlesOnRight(collisionCells);
-            fileGenerator.addCells(collisionCells, numberOfParticles, endTime - startCycleTime, particlesOnLeft, particlesOnRight, endTime - startTime);
+            fileGenerator.addToXYZ(collisionCells, numberOfParticles, endTime - startCycleTime, particlesOnLeft, particlesOnRight, endTime - startTime);
+            fileGenerator.addToCSV(endTime - startTime, particlesOnLeft, particlesOnRight);
         }
-        fileGenerator.closeFile();
+        fileGenerator.closeFiles();
     }
 
     private void propagateParticles(Cell[][] fromCells, Cell[][] toCells){

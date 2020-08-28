@@ -3,31 +3,48 @@ package engine;
 import model.Cell;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
 public class FileGenerator {
-    private FileWriter fw;
-    private final BufferedWriter bw;
-    private final boolean angle;
+    private FileWriter fw1;
+    private FileWriter fw2;
+    private final BufferedWriter bw1;
+    private final BufferedWriter bw2;
 
-    public FileGenerator(String filename, boolean angle) {
+    public FileGenerator(String filename) {
         try {
-            FileWriter pw = new FileWriter("out/" + filename + ".xyz");
-            pw.close();
-            this.fw = new FileWriter("out/" + filename + ".xyz", true);
+            File directory = new File("out/");
+            if (!directory.exists()) {
+                directory.mkdir();
+            }
+            FileWriter pw1 = new FileWriter("out/" + filename + ".xyz");
+            FileWriter pw2 = new FileWriter("out/" + filename + ".csv");
+            pw1.close();
+            pw2.close();
+            this.fw1 = new FileWriter("out/" + filename + ".xyz", true);
+            this.fw2 = new FileWriter("out/" + filename + ".csv", true);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.bw = new BufferedWriter(fw);
-        this.angle = angle;
+        this.bw1 = new BufferedWriter(fw1);
+        this.bw2 = new BufferedWriter(fw2);
     }
 
-    public void addCells(Cell[][] cells, int numberOfParticles, long timeOfCycle, int particlesOnLeft, int particlesOnRight, long finalTime){
+    public void addToCSV(long time, int particlesOnLeft, int particlesOnRight){
+        try {
+            bw2.write(time + "," + particlesOnLeft + "," + particlesOnRight + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addToXYZ(Cell[][] cells, int numberOfParticles, long timeOfCycle, int particlesOnLeft, int particlesOnRight, long finalTime){
         double x, y, toX, toY, dY = (Math.sqrt(3)/2);
         try {
-            bw.write(numberOfParticles + "\n");
-            bw.write(particlesOnLeft + " " + particlesOnRight + " " + timeOfCycle + " " + finalTime + "\n");
+            bw1.write(numberOfParticles + "\n");
+            bw1.write(particlesOnLeft + " " + particlesOnRight + " " + timeOfCycle + " " + finalTime + "\n");
             for(int i=0; i < 202; i++){
                 for(int j=0; j < 203; j++){
                     if(!cells[i][j].isWall()) {
@@ -38,64 +55,34 @@ public class FileGenerator {
                             x = j + 0.5;
                         }
                         if (cells[i][j].isA()) {
-                            if(angle){
-                                bw.write(x + " " + y + " 0.0\n");
-                            }
-                            else {
-                                toX = x + 1;
-                                toY = y;
-                                bw.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
-                            }
+                            toX = x + 1;
+                            toY = y;
+                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
                         }
                         if (cells[i][j].isB()) {
-                            if(angle){
-                                bw.write(x + " " + y + " 60.0\n");
-                            }
-                            else {
-                                toX = x + 1;
-                                toY = y - dY;
-                                bw.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
-                            }
+                            toX = x + 1;
+                            toY = y - dY;
+                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
                         }
                         if (cells[i][j].isC()) {
-                            if(angle){
-                                bw.write(x + " " + y + " 120.0\n");
-                            }
-                            else {
-                                toX = x - 1;
-                                toY = y - dY;
-                                bw.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
-                            }
+                            toX = x - 1;
+                            toY = y - dY;
+                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
                         }
                         if (cells[i][j].isD()) {
-                            if(angle){
-                                bw.write(x + " " + y + " 180.0\n");
-                            }
-                            else {
-                                toX = x - 1;
-                                toY = y;
-                                bw.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
-                            }
+                            toX = x - 1;
+                            toY = y;
+                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
                         }
                         if (cells[i][j].isE()) {
-                            if(angle){
-                                bw.write(x + " " + y + " 240.0\n");
-                            }
-                            else {
-                                toX = x - 1;
-                                toY = y + dY;
-                                bw.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
-                            }
+                            toX = x - 1;
+                            toY = y + dY;
+                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
                         }
                         if (cells[i][j].isF()) {
-                            if(angle){
-                                bw.write(x + " " + y + " 300.0\n");
-                            }
-                            else {
-                                toX = x + 1;
-                                toY = y + dY;
-                                bw.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
-                            }
+                            toX = x + 1;
+                            toY = y + dY;
+                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
                         }
                     }
                 }
@@ -105,9 +92,10 @@ public class FileGenerator {
         }
     }
 
-    public void closeFile(){
+    public void closeFiles(){
         try {
-            bw.close();
+            bw1.close();
+            bw2.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
