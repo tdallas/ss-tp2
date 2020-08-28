@@ -42,12 +42,19 @@ public class FileGenerator {
 
     public void addToXYZ(Cell[][] cells, int numberOfParticles, long timeOfCycle, int particlesOnLeft, int particlesOnRight, long finalTime){
         double x, y, toX, toY, dY = (Math.sqrt(3)/2);
+        int color;
         try {
             bw1.write(numberOfParticles + "\n");
             bw1.write(particlesOnLeft + " " + particlesOnRight + " " + timeOfCycle + " " + finalTime + "\n");
             for(int i=0; i < 202; i++){
                 for(int j=0; j < 203; j++){
                     if(!cells[i][j].isWall()) {
+                        if(j < 101){
+                            color = (int)(((double)particlesOnLeft/(double)numberOfParticles) * 254) + 1;
+                        }
+                        else{
+                            color = (int)(((double)particlesOnRight/(double)numberOfParticles) * 254) + 1;
+                        }
                         y = i * dY;
                         if (j % 2 == 0) {
                             x = j;
@@ -57,32 +64,32 @@ public class FileGenerator {
                         if (cells[i][j].isA()) {
                             toX = x + 1;
                             toY = y;
-                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
+                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + " " + color + "\n");
                         }
                         if (cells[i][j].isB()) {
                             toX = x + 1;
                             toY = y - dY;
-                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
+                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + " " + color + "\n");
                         }
                         if (cells[i][j].isC()) {
                             toX = x - 1;
                             toY = y - dY;
-                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
+                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + " " + color + "\n");
                         }
                         if (cells[i][j].isD()) {
                             toX = x - 1;
                             toY = y;
-                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
+                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + " " + color + "\n");
                         }
                         if (cells[i][j].isE()) {
                             toX = x - 1;
                             toY = y + dY;
-                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
+                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + " " + color + "\n");
                         }
                         if (cells[i][j].isF()) {
                             toX = x + 1;
                             toY = y + dY;
-                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + "\n");
+                            bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + " " + color + "\n");
                         }
                     }
                 }
