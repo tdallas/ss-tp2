@@ -30,6 +30,11 @@ public class FileGenerator {
         }
         this.bw1 = new BufferedWriter(fw1);
         this.bw2 = new BufferedWriter(fw2);
+        try {
+            bw2.write("t,nL,nR\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addToCSV(long time, int particlesOnLeft, int particlesOnRight){
