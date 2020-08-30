@@ -28,6 +28,7 @@ public class FHPSimulation {
 
     public void simulate(){
         fileGenerator.addToXYZ(collisionCells, numberOfParticles, 0, particlesOnLeft, particlesOnRight, 0);
+        fileGenerator.addToCSV(0, particlesOnLeft, particlesOnRight, numberOfParticles);
         long startTime = System.currentTimeMillis();
         long endTime, startCycleTime;
         while(!isBalanced()){
@@ -41,7 +42,7 @@ public class FHPSimulation {
             particlesOnLeft = getParticlesOnLeft(collisionCells);
             particlesOnRight = getParticlesOnRight(collisionCells);
             fileGenerator.addToXYZ(collisionCells, numberOfParticles, endTime - startCycleTime, particlesOnLeft, particlesOnRight, endTime - startTime);
-            fileGenerator.addToCSV(endTime - startTime, particlesOnLeft, particlesOnRight);
+            fileGenerator.addToCSV(endTime - startTime, particlesOnLeft, particlesOnRight, numberOfParticles);
         }
         fileGenerator.closeFiles();
     }

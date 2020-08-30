@@ -37,9 +37,9 @@ public class FileGenerator {
         }
     }
 
-    public void addToCSV(long time, int particlesOnLeft, int particlesOnRight){
+    public void addToCSV(long time, int particlesOnLeft, int particlesOnRight, int numberOfParticles){
         try {
-            bw2.write(time + "," + particlesOnLeft + "," + particlesOnRight + "\n");
+            bw2.write(time + "," + ((double)particlesOnLeft/(double)numberOfParticles) + "," + ((double)particlesOnRight/(double)numberOfParticles) + "\n");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,7 +47,7 @@ public class FileGenerator {
 
     public void addToXYZ(Cell[][] cells, int numberOfParticles, long timeOfCycle, int particlesOnLeft, int particlesOnRight, long finalTime){
         double x, y, toX, toY, dY = (Math.sqrt(3)/2);
-        int color;
+        double color;
         try {
             bw1.write(numberOfParticles + "\n");
             bw1.write(particlesOnLeft + " " + particlesOnRight + " " + timeOfCycle + " " + finalTime + "\n");
@@ -55,10 +55,10 @@ public class FileGenerator {
                 for(int j=0; j < 203; j++){
                     if(!cells[i][j].isWall()) {
                         if(j < 101){
-                            color = (int)(((double)particlesOnLeft/(double)numberOfParticles) * 254) + 1;
+                            color = (double)particlesOnLeft/(double)numberOfParticles;
                         }
                         else{
-                            color = (int)(((double)particlesOnRight/(double)numberOfParticles) * 254) + 1;
+                            color = (double)particlesOnRight/(double)numberOfParticles;
                         }
                         y = i * dY;
                         if (j % 2 == 0) {
