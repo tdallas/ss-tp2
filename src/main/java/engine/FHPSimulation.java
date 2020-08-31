@@ -51,13 +51,16 @@ public class FHPSimulation {
         for(int i = 0; i < fromCells.length; i++){
             for(int j = 0; j < fromCells[i].length; j++){
                 if(!fromCells[i][j].isWall()) {
+                    // 0 degrees movement
                     if (fromCells[i][j].isA()) {
                         if (!fromCells[i][j + 1].isWall()) {
                             toCells[i][j + 1].setA(true);
                         } else {
+                            // opposite direction
                             toCells[i][j].setD(true);
                         }
                     }
+                    // 60 degrees movement
                     if (fromCells[i][j].isB()) {
                         if (!fromCells[i - 1][j + 1].isWall()) {
                             toCells[i - 1][j + 1].setB(true);
@@ -76,6 +79,7 @@ public class FHPSimulation {
                             }
                         }
                     }
+                    // 120 degrees movement
                     if (fromCells[i][j].isC()) {
                         if (!fromCells[i - 1][j - 1].isWall()) {
                             toCells[i - 1][j - 1].setC(true);
@@ -94,6 +98,7 @@ public class FHPSimulation {
                             }
                         }
                     }
+                    // 180 degrees movement
                     if (fromCells[i][j].isD()) {
                         if (!fromCells[i][j - 1].isWall()) {
                             toCells[i][j - 1].setD(true);
@@ -101,6 +106,7 @@ public class FHPSimulation {
                             toCells[i][j].setA(true);
                         }
                     }
+                    // 240 degrees movement
                     if (fromCells[i][j].isE()) {
                         if (!fromCells[i + 1][j - 1].isWall()) {
                             toCells[i + 1][j - 1].setE(true);
@@ -119,6 +125,7 @@ public class FHPSimulation {
                             }
                         }
                     }
+                    // 300 degrees movement
                     if (fromCells[i][j].isF()) {
                         if (!fromCells[i + 1][j + 1].isWall()) {
                             toCells[i + 1][j + 1].setF(true);
