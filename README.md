@@ -29,3 +29,8 @@ And this will generate:
 `out/test.xyz`
 
 `out/test.csv`
+
+## Visual
+For a visual chart of time vs particles using N particles (N = 1000, 2000 and 3000:
+`pip3 install pandas matplotlib`
+`python3 visual/time_vs_particles.py`
