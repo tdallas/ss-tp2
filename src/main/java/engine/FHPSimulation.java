@@ -33,11 +33,11 @@ public class FHPSimulation {
         long endTime, startCycleTime;
         while(!isBalanced()){
             startCycleTime = System.currentTimeMillis();
-            Propagator.propagateParticles(collisionCells, propagatedCells);
+            ParticlesPropagator.propagateParticles(collisionCells, propagatedCells);
             endTime = System.currentTimeMillis();
             fileGenerator.addToXYZ(propagatedCells, numberOfParticles, endTime - startCycleTime, particlesOnLeft, particlesOnRight, endTime - startTime);
             startCycleTime = System.currentTimeMillis();
-            Colissioner.collisionParticles(propagatedCells, collisionCells, rand);
+            ParticleCollider.collisionParticles(propagatedCells, collisionCells, rand);
             endTime = System.currentTimeMillis();
             particlesOnLeft = getParticlesOnLeft(collisionCells);
             particlesOnRight = getParticlesOnRight(collisionCells);

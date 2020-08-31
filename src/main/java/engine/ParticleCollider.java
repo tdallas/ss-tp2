@@ -4,7 +4,7 @@ import model.Cell;
 
 import java.util.Random;
 
-public class Colissioner {
+public class ParticleCollider {
 
     public static void collisionParticles(Cell[][] fromCells, Cell[][] toCells, Random rand){
         for(int i = 0; i < fromCells.length; i++){

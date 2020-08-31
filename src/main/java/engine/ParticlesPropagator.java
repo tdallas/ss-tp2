@@ -2,7 +2,7 @@ package engine;
 
 import model.Cell;
 
-public class Propagator {
+public class ParticlesPropagator {
 
     public static void propagateParticles(Cell[][] fromCells, Cell[][] toCells){
         for(int i = 0; i < fromCells.length; i++){
