@@ -35,6 +35,34 @@ public class FileGenerator {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        writeWall();
+    }
+
+    private void writeWall(){
+        double dY = (Math.sqrt(3)/2)/2;
+        double dX = 0.5;
+        try {
+            FileWriter pw = new FileWriter("out/walls.xyz");
+            pw.close();
+            pw = new FileWriter("out/walls.xyz", true);
+            BufferedWriter bw = new BufferedWriter(pw);
+            bw.write("1923\n");
+            bw.write("wall particles: x y\n");
+            for(int i = 0; i < 406; i ++){
+                bw.write((dX*i) + " " + (dY*0) + "\n");
+                bw.write((dX + dX*i) + " " + (dY*404) + "\n");
+            }
+            for(int i = 0; i < 404; i ++){
+                bw.write((dX*0) + " " + (dY*i) + "\n");
+                bw.write((dX + dX*406) + " " + (dY*i) + "\n");
+                if(i <= 150 || i >= 252){
+                    bw.write((dX*202) + " " + (dY*i) + "\n");
+                }
+            }
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addToCSV(long time, int particlesOnLeft, int particlesOnRight, int numberOfParticles){

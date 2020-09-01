@@ -64,6 +64,10 @@ public class Main {
         }
 
         filename = cmd.getOptionValue("output");
+        if(filename.equals("walls")){
+            System.out.println("Invalid filename, cannot be named: wall");
+            System.exit(1);
+        }
 
         String aux = cmd.getOptionValue("seed");
         if(aux != null) {
