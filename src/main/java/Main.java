@@ -24,7 +24,7 @@ public class Main {
         }
         if(!repeats) {
             ParticlesGenerator particlesGenerator = new ParticlesGenerator(rand, numberOfParticles);
-            FHPSimulation fhpSimulation = new FHPSimulation(numberOfParticles, particlesGenerator.getNodes(), filename, rand);
+            FHPSimulation fhpSimulation = new FHPSimulation(numberOfParticles, particlesGenerator.getCells(), filename, rand);
             fhpSimulation.simulate();
         }
         else{
@@ -32,7 +32,7 @@ public class Main {
             for(int i = 0; i < numberOfRepetitions; i++) {
                 rand = new Random();
                 ParticlesGenerator particlesGenerator = new ParticlesGenerator(rand, numberOfParticles);
-                FHPSimulation fhpSimulation = new FHPSimulation(numberOfParticles, particlesGenerator.getNodes(), timeFileGenerator, rand);
+                FHPSimulation fhpSimulation = new FHPSimulation(numberOfParticles, particlesGenerator.getCells(), timeFileGenerator, rand);
                 fhpSimulation.simulate();
             }
             timeFileGenerator.closeFile();

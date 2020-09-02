@@ -1,6 +1,6 @@
 package engine;
 
-import model.Node;
+import model.Cell;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -73,7 +73,7 @@ public class FileGenerator {
         }
     }
 
-    public void addToXYZ(Node[][] nodes, int numberOfParticles, long timeOfCycle, int particlesOnLeft, int particlesOnRight, long finalTime){
+    public void addToXYZ(Cell[][] cells, int numberOfParticles, long timeOfCycle, int particlesOnLeft, int particlesOnRight, long finalTime){
         double x, y, toX, toY, dY = (Math.sqrt(3)/2);
         double color;
         try {
@@ -81,7 +81,7 @@ public class FileGenerator {
             bw1.write(particlesOnLeft + " " + particlesOnRight + " " + timeOfCycle + " " + finalTime + "\n");
             for(int i=0; i < 202; i++){
                 for(int j=0; j < 203; j++){
-                    if(!nodes[i][j].isWall()) {
+                    if(!cells[i][j].isWall()) {
                         if(j < 101){
                             color = (double)particlesOnLeft/(double)numberOfParticles;
                         }
@@ -94,32 +94,32 @@ public class FileGenerator {
                         } else {
                             x = j + 0.5;
                         }
-                        if (nodes[i][j].isA()) {
+                        if (cells[i][j].isA()) {
                             toX = x + 1;
                             toY = y;
                             bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + " " + color + "\n");
                         }
-                        if (nodes[i][j].isB()) {
+                        if (cells[i][j].isB()) {
                             toX = x + 1;
                             toY = y - dY;
                             bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + " " + color + "\n");
                         }
-                        if (nodes[i][j].isC()) {
+                        if (cells[i][j].isC()) {
                             toX = x - 1;
                             toY = y - dY;
                             bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + " " + color + "\n");
                         }
-                        if (nodes[i][j].isD()) {
+                        if (cells[i][j].isD()) {
                             toX = x - 1;
                             toY = y;
                             bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + " " + color + "\n");
                         }
-                        if (nodes[i][j].isE()) {
+                        if (cells[i][j].isE()) {
                             toX = x - 1;
                             toY = y + dY;
                             bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + " " + color + "\n");
                         }
-                        if (nodes[i][j].isF()) {
+                        if (cells[i][j].isF()) {
                             toX = x + 1;
                             toY = y + dY;
                             bw1.write(x + " " + y + " " + (toX - x) + " " + (toY - y) + " " + color + "\n");

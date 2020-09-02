@@ -9,7 +9,7 @@ repetition = 100
 for n in n_values:
     cmd = 'java -jar ../target/ss-tp2-1.0.jar -n {:g} -o output{:g} -r {:g}'.format(n, n, repetition)
     print(cmd)
-    #os.system(cmd)
+    os.system(cmd)
 
 for n in n_values:
     df = pd.read_csv('out/r-{:g}-output{:g}.csv'.format(repetition, n))
