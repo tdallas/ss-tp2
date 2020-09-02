@@ -88,18 +88,20 @@ public class Main {
             System.exit(1);
         }
 
-        try {
-            numberOfRepetitions = Integer.parseInt(cmd.getOptionValue("repeat"));
-        } catch(NumberFormatException e){
-            System.out.println("Invalid argument number of particles, must be integer");
-            System.exit(1);
-        }
-        if(numberOfRepetitions < 1){
-            System.out.println("Invalid number of repetitions, must be over 1");
-            System.exit(1);
-        }
-        else{
-            repeats = true;
+        String numberOfRepetitionsString = cmd.getOptionValue("repeat");
+        if(numberOfRepetitionsString != null) {
+            try {
+                numberOfRepetitions = Integer.parseInt(numberOfRepetitionsString);
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid argument number of repetitions, must be integer");
+                System.exit(1);
+            }
+            if (numberOfRepetitions < 1) {
+                System.out.println("Invalid number of repetitions, must be over 1");
+                System.exit(1);
+            } else {
+                repeats = true;
+            }
         }
 
         String aux = cmd.getOptionValue("seed");
