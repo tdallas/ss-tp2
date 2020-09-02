@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+//This is used to generate multiple cases and create a csv with the time it took for each simulation to reach equilibrium
 public class TimeFileGenerator {
     private FileWriter fw;
     private final BufferedWriter bw;

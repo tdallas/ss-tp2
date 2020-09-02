@@ -15,10 +15,11 @@ public class FHPSimulation {
     private final Random rand;
     private final int BALANCE_LIMIT;
 
-    public FHPSimulation(int numberOfParticles, Node[][] nodes, TimeFileGenerator timeFileGenerator, Random rand){
+    //Constructor that generates .xyz and .csv
+    public FHPSimulation(int numberOfParticles, Node[][] nodes, String outputFilename, Random rand){
         this.numberOfParticles = numberOfParticles;
-        this.fileGenerator = null;
-        this.timeFileGenerator = timeFileGenerator;
+        this.timeFileGenerator = null;
+        this.fileGenerator = new FileGenerator(outputFilename);
         this.collisionNodes = cloneNodes(nodes);
         this.propagatedNodes = cloneNodes(nodes);
         cleanNodes(this.propagatedNodes);
@@ -28,10 +29,11 @@ public class FHPSimulation {
         this.BALANCE_LIMIT = (int)(numberOfParticles * 0.01);
     }
 
-    public FHPSimulation(int numberOfParticles, Node[][] nodes, String outputFilename, Random rand){
+    //Constructor that only makes .csv for repetition with the time of each repetition
+    public FHPSimulation(int numberOfParticles, Node[][] nodes, TimeFileGenerator timeFileGenerator, Random rand){
         this.numberOfParticles = numberOfParticles;
-        this.timeFileGenerator = null;
-        this.fileGenerator = new FileGenerator(outputFilename);
+        this.fileGenerator = null;
+        this.timeFileGenerator = timeFileGenerator;
         this.collisionNodes = cloneNodes(nodes);
         this.propagatedNodes = cloneNodes(nodes);
         cleanNodes(this.propagatedNodes);
