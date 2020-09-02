@@ -1,5 +1,6 @@
 import engine.FHPSimulation;
 import engine.ParticlesGenerator;
+import engine.TimeFileGenerator;
 import org.apache.commons.cli.*;
 
 import java.util.Random;
@@ -8,6 +9,8 @@ public class Main {
     private static int numberOfParticles;
     private static String filename;
     private static Long seed = null;
+    private static boolean repeats = false;
+    private static int numberOfRepetitions = 0;
 
     public static void main(String[] args){
         parseArguments(args);
@@ -19,9 +22,21 @@ public class Main {
         else{
             rand = new Random(seed);
         }
-        ParticlesGenerator particlesGenerator = new ParticlesGenerator(rand, numberOfParticles);
-        FHPSimulation fhpSimulation = new FHPSimulation(numberOfParticles, particlesGenerator.getNodes(), filename, rand);
-        fhpSimulation.simulate();
+        if(!repeats) {
+            ParticlesGenerator particlesGenerator = new ParticlesGenerator(rand, numberOfParticles);
+            FHPSimulation fhpSimulation = new FHPSimulation(numberOfParticles, particlesGenerator.getNodes(), filename, rand);
+            fhpSimulation.simulate();
+        }
+        else{
+            TimeFileGenerator timeFileGenerator = new TimeFileGenerator(filename, numberOfRepetitions);
+            for(int i = 0; i < numberOfRepetitions; i++) {
+                rand = new Random();
+                ParticlesGenerator particlesGenerator = new ParticlesGenerator(rand, numberOfParticles);
+                FHPSimulation fhpSimulation = new FHPSimulation(numberOfParticles, particlesGenerator.getNodes(), timeFileGenerator, rand);
+                fhpSimulation.simulate();
+            }
+            timeFileGenerator.closeFile();
+        }
     }
 
     private static void parseArguments(String[] args){
@@ -38,6 +53,10 @@ public class Main {
         Option seedOption = new Option("s", "seed", true, "seed for randomizer (optional)");
         seedOption.setRequired(false);
         options.addOption(seedOption);
+
+        Option repetitionOption = new Option("r", "repeat", true, "repetition number (optional)");
+        repetitionOption.setRequired(false);
+        options.addOption(repetitionOption);
 
         CommandLineParser parser = new DefaultParser();
         HelpFormatter formatter = new HelpFormatter();
@@ -69,6 +88,20 @@ public class Main {
             System.exit(1);
         }
 
+        try {
+            numberOfRepetitions = Integer.parseInt(cmd.getOptionValue("repeat"));
+        } catch(NumberFormatException e){
+            System.out.println("Invalid argument number of particles, must be integer");
+            System.exit(1);
+        }
+        if(numberOfRepetitions < 1){
+            System.out.println("Invalid number of repetitions, must be over 1");
+            System.exit(1);
+        }
+        else{
+            repeats = true;
+        }
+
         String aux = cmd.getOptionValue("seed");
         if(aux != null) {
             try {
@@ -77,6 +110,10 @@ public class Main {
                 System.out.println("Invalid argument seed, must be long");
                 System.exit(1);
             }
+        }
+        if(repeats && aux != null){
+            System.out.println("Invalid arguments, seed cannot be used with repetitions");
+            System.exit(1);
         }
     }
 }

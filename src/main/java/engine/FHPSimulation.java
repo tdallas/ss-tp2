@@ -6,6 +6,7 @@ import java.util.Random;
 
 public class FHPSimulation {
     private final FileGenerator fileGenerator;
+    private final TimeFileGenerator timeFileGenerator;
     private final int numberOfParticles;
     private final Node[][] propagatedNodes;
     private final Node[][] collisionNodes;
@@ -14,8 +15,22 @@ public class FHPSimulation {
     private final Random rand;
     private final int BALANCE_LIMIT;
 
+    public FHPSimulation(int numberOfParticles, Node[][] nodes, TimeFileGenerator timeFileGenerator, Random rand){
+        this.numberOfParticles = numberOfParticles;
+        this.fileGenerator = null;
+        this.timeFileGenerator = timeFileGenerator;
+        this.collisionNodes = cloneNodes(nodes);
+        this.propagatedNodes = cloneNodes(nodes);
+        cleanNodes(this.propagatedNodes);
+        this.particlesOnRight = 0;
+        this.particlesOnLeft = numberOfParticles;
+        this.rand = rand;
+        this.BALANCE_LIMIT = (int)(numberOfParticles * 0.01);
+    }
+
     public FHPSimulation(int numberOfParticles, Node[][] nodes, String outputFilename, Random rand){
         this.numberOfParticles = numberOfParticles;
+        this.timeFileGenerator = null;
         this.fileGenerator = new FileGenerator(outputFilename);
         this.collisionNodes = cloneNodes(nodes);
         this.propagatedNodes = cloneNodes(nodes);
@@ -27,24 +42,38 @@ public class FHPSimulation {
     }
 
     public void simulate(){
-        fileGenerator.addToXYZ(collisionNodes, numberOfParticles, 0, particlesOnLeft, particlesOnRight, 0);
-        fileGenerator.addToCSV(0, particlesOnLeft, particlesOnRight, numberOfParticles);
-        long startTime = System.currentTimeMillis();
-        long endTime, startCycleTime;
-        while(!isBalanced()){
-            startCycleTime = System.currentTimeMillis();
-            ParticlesPropagator.propagateParticles(collisionNodes, propagatedNodes);
-            endTime = System.currentTimeMillis();
-            fileGenerator.addToXYZ(propagatedNodes, numberOfParticles, endTime - startCycleTime, particlesOnLeft, particlesOnRight, endTime - startTime);
-            startCycleTime = System.currentTimeMillis();
-            ParticleCollider.collisionParticles(propagatedNodes, collisionNodes, rand);
-            endTime = System.currentTimeMillis();
-            particlesOnLeft = getParticlesOnLeft(collisionNodes);
-            particlesOnRight = getParticlesOnRight(collisionNodes);
-            fileGenerator.addToXYZ(collisionNodes, numberOfParticles, endTime - startCycleTime, particlesOnLeft, particlesOnRight, endTime - startTime);
-            fileGenerator.addToCSV(endTime - startTime, particlesOnLeft, particlesOnRight, numberOfParticles);
+        long startTime, endTime;
+        if(fileGenerator != null) {
+            fileGenerator.addToXYZ(collisionNodes, numberOfParticles, 0, particlesOnLeft, particlesOnRight, 0);
+            fileGenerator.addToCSV(0, particlesOnLeft, particlesOnRight, numberOfParticles);
+            startTime = System.currentTimeMillis();
+            long startCycleTime;
+            while (!isBalanced()) {
+                startCycleTime = System.currentTimeMillis();
+                ParticlesPropagator.propagateParticles(collisionNodes, propagatedNodes);
+                endTime = System.currentTimeMillis();
+                fileGenerator.addToXYZ(propagatedNodes, numberOfParticles, endTime - startCycleTime, particlesOnLeft, particlesOnRight, endTime - startTime);
+                startCycleTime = System.currentTimeMillis();
+                ParticleCollider.collisionParticles(propagatedNodes, collisionNodes, rand);
+                endTime = System.currentTimeMillis();
+                particlesOnLeft = getParticlesOnLeft(collisionNodes);
+                particlesOnRight = getParticlesOnRight(collisionNodes);
+                fileGenerator.addToXYZ(collisionNodes, numberOfParticles, endTime - startCycleTime, particlesOnLeft, particlesOnRight, endTime - startTime);
+                fileGenerator.addToCSV(endTime - startTime, particlesOnLeft, particlesOnRight, numberOfParticles);
+            }
+            fileGenerator.closeFiles();
         }
-        fileGenerator.closeFiles();
+        else{
+            startTime = System.currentTimeMillis();
+            while (!isBalanced()) {
+                ParticlesPropagator.propagateParticles(collisionNodes, propagatedNodes);
+                ParticleCollider.collisionParticles(propagatedNodes, collisionNodes, rand);
+                particlesOnLeft = getParticlesOnLeft(collisionNodes);
+                particlesOnRight = getParticlesOnRight(collisionNodes);
+            }
+            endTime = System.currentTimeMillis();
+            timeFileGenerator.addToCSV(numberOfParticles, endTime - startTime);
+        }
     }
 
     private void cleanNodes(Node[][] nodes){
