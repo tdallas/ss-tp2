@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Cell {
+public class Node {
     private boolean wall;
     private boolean A;
     private boolean B;
@@ -16,14 +16,14 @@ public class Cell {
     private boolean E;
     private boolean F;
 
-    public Cell(Cell cell){
-        this.wall = cell.wall;
-        this.A = cell.A;
-        this.B = cell.B;
-        this.C = cell.C;
-        this.D = cell.D;
-        this.E = cell.E;
-        this.F = cell.F;
+    public Node(Node node){
+        this.wall = node.wall;
+        this.A = node.A;
+        this.B = node.B;
+        this.C = node.C;
+        this.D = node.D;
+        this.E = node.E;
+        this.F = node.F;
     }
 
     public int particleCount(){
@@ -49,7 +49,7 @@ public class Cell {
         return sum;
     }
 
-    public void resetCell(){
+    public void resetNode(){
         A = false;
         B = false;
         C = false;

@@ -20,7 +20,7 @@ public class Main {
             rand = new Random(seed);
         }
         ParticlesGenerator particlesGenerator = new ParticlesGenerator(rand, numberOfParticles);
-        FHPSimulation fhpSimulation = new FHPSimulation(numberOfParticles, particlesGenerator.getCells(), filename, rand);
+        FHPSimulation fhpSimulation = new FHPSimulation(numberOfParticles, particlesGenerator.getNodes(), filename, rand);
         fhpSimulation.simulate();
     }
 
