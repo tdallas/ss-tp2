@@ -16,9 +16,9 @@ public class TimeFileGenerator {
             if (!directory.exists()) {
                 directory.mkdir();
             }
-            FileWriter pw = new FileWriter("out/n-" + numberOfRepetitions + "-" + filename + ".csv");
+            FileWriter pw = new FileWriter("out/r-" + numberOfRepetitions + "-" + filename + ".csv");
             pw.close();
-            this.fw = new FileWriter("out/n-" + numberOfRepetitions + "-" + filename + ".csv", true);
+            this.fw = new FileWriter("out/r-" + numberOfRepetitions + "-" + filename + ".csv", true);
         } catch (IOException e) {
             e.printStackTrace();
         }
