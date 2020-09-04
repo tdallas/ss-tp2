@@ -31,6 +31,24 @@ And this will generate:
 `out/test.csv`
 
 ## Visual
-For a visual chart of time vs particles using N particles (N = 1000, 2000 and 3000:
+To run the following python visual charts must install the following libraries:
+
 `pip3 install pandas matplotlib`
+
+For a visual chart of time vs particles using N particles (N = 1000, 2000 and 3000):
+
 `python3 visual/time_vs_particles.py`
+
+For a visual chart of time vs particles using N particles with a determined seed (N = 1000, 2000 and 3000):
+
+`python3 visual/time_vs_particles_seed.py`
+
+For a visual chart of time average with N from 1000 to 8000:
+
+`python3 visual/time_average.py`
+
+## Authors
+
+Tomás Dallas
+
+Tomás Dorado
