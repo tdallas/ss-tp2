@@ -1,7 +1,7 @@
 # ss-tp2
 
 ## Generate executable
-`mvn clean install`
+`mvn clean install && mvn clean package`
 
 ## Execute command
 Required options: n, o
